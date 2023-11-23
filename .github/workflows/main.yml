@@ -1,0 +1,47 @@
+name: Newman collection runner
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+
+      # INstall Node on the runner
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+
+      # Install the newman command line utility and also install the html extra reporter
+      - name: Install newman
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+
+
+      # Make directory to upload the test results
+      - name: Make Directory for results
+        run: mkdir -p testResults
+
+      # Run the POSTMAN collection
+      - name: Run POSTMAN collection
+        run: |
+          newman run petstore.collection.json --insecure --disable-unicode --verbose -r htmlextra --reporter-htmlextra-export testResults/index.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html -k
+      # Deploy the results    
+      - name: Deploy 🚀
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: testResults
+      - name: Print Report Link
+        if: always()
+        run: |
+          echo "Report: https://mariana-zaozirna.github.io/postman_newman/" >> $GITHUB_STEP_SUMMARY    
+    

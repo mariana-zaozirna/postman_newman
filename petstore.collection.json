@@ -65,7 +65,7 @@
 							"variable": [
 								{
 									"key": "petId",
-									"value": "123",
+									"value": "137",
 									"description": "(Required) ID of pet to return"
 								}
 							]
@@ -252,7 +252,7 @@
 							"variable": [
 								{
 									"key": "petId",
-									"value": "1337",
+									"value": "1",
 									"description": "(Required) ID of pet that needs to be updated"
 								}
 							]
